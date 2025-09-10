@@ -1,0 +1,15 @@
+# .dockerignore
+# Ignore node_modules and build artifacts
+node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+*.orig
+.git/
+/dist
+/build
