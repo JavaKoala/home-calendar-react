@@ -30,4 +30,4 @@ npm run build
 docker compose up
 ```
 
-navigate to `http://localhost/`
+navigate to `http://localhost:8080/`
