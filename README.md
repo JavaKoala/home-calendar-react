@@ -10,6 +10,12 @@
 npm install
 ```
 
+- Copy environment variables
+
+```
+cp .env.development.sample .env.development 
+```
+
 - Run
 
 ```
