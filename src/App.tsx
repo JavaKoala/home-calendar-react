@@ -1,7 +1,7 @@
 function App() {
   return (
     <>
-      <h1>Home Calendar</h1>
+      <h1 className="text-2xl">Home Calendar</h1>
     </>
   )
 }
