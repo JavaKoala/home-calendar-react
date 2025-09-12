@@ -7,7 +7,12 @@ function App() {
   return (
     <FullCalendar
       plugins={[ dayGridPlugin ]}
-      initialView="dayGridMonth"
+      initialView="dayGridWeek"
+      headerToolbar={{
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridWeek,dayGridMonth,dayGridDay'
+      }}
       events={apiEvents}
     />
   )
