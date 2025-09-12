@@ -5,6 +5,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json* ./
+COPY .env.production.sample .env.production
 RUN npm ci
 
 # Copy source code
