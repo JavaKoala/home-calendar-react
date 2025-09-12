@@ -9,7 +9,6 @@ RUN npm ci
 
 # Copy source code
 COPY . .
-COPY .env.production.sample .env.production
 
 # Build the production bundle
 RUN npm run build
