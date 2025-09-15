@@ -37,3 +37,7 @@ docker compose up
 ```
 
 navigate to `http://localhost:8080/`
+
+## Header Icon
+
+Calendar emoji designed by [OpenMoji](https://openmoji.org/) – the open-source emoji and icon project. License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/#)
