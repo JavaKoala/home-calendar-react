@@ -106,7 +106,7 @@ export class HomeCalendarApiClient {
       try {
         const errors = (await res.json()) as ValidationError;
         errorMessage = `Validation error: ${JSON.stringify(errors)}`;
-      } catch (e) {
+      } catch {
         const text = await res.text();
         errorMessage = `Error ${String(res.status)}: ${text}`;
       }
