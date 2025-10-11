@@ -102,8 +102,15 @@ export class HomeCalendarApiClient {
       if (res.status === 404) {
         throw new Error(`Event ${String(id)} not found`);
       }
-      const errors = (await res.json()) as ValidationError;
-      throw new Error(`Validation error: ${JSON.stringify(errors)}`);
+      let errorMessage: string;
+      try {
+        const errors = (await res.json()) as ValidationError;
+        errorMessage = `Validation error: ${JSON.stringify(errors)}`;
+      } catch (e) {
+        const text = await res.text();
+        errorMessage = `Error ${String(res.status)}: ${text}`;
+      }
+      throw new Error(errorMessage);
     }
 
     return res.json() as Promise<Event[]>;
