@@ -113,7 +113,7 @@ export class HomeCalendarApiClient {
   async deleteEvent(id: number, applyToSeries?: boolean): Promise<void> {
     const url = new URL(`${this.baseUrl}/api/v1/events/${String(id)}`);
     if (applyToSeries !== undefined) {
-      url.searchParams.append("apply_to_series", String(applyToSeries));
+      url.searchParams.append("apply_to_series", applyToSeries ? "1" : "0");
     }
 
     const res = await fetch(url.toString(), {
