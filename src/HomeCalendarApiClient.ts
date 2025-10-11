@@ -44,7 +44,7 @@ export class HomeCalendarApiClient {
 
     if (!res.ok) {
       const text = await res.text();
-      throw new Error(`Error ${res.status.toString()}: ${text}`);
+      throw new Error(`Error ${String(res.status)}: ${text}`);
     }
 
     return res.json() as Promise<Event[]>;
