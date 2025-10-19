@@ -28,12 +28,12 @@ export class HomeCalendarApiClient {
 
   constructor(baseUrl?: string) {
     // Default to localhost:3000 if not provided
-    this.baseUrl = baseUrl ?? "http://localhost:3000";
+    this.baseUrl = baseUrl ?? "http://localhost:3000/api/v1";
   }
 
   /** List events in a date range */
   async listEvents(start: string, end: string): Promise<Event[]> {
-    const url = new URL(`${this.baseUrl}/api/v1/events`);
+    const url = new URL(`${this.baseUrl}/events`);
     url.searchParams.append("start", start);
     url.searchParams.append("end", end);
 
