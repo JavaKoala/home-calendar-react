@@ -8,6 +8,7 @@ function App() {
   const apiUrl = import.meta.env.VITE_HOME_CALENDAR_API_URL as string;
   const client = useMemo(() => new HomeCalendarApiClient(apiUrl), [apiUrl]);
 
+  const [intialLoaded, setInitialLoaded] = useState<boolean>(false);
   const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
@@ -20,6 +21,7 @@ function App() {
 
         const data = await client.listEvents(start, end);
         setEvents(data);
+        setInitialLoaded(true);
       } catch (err) {
         console.error('Failed to load events', err);
       }
@@ -29,21 +31,25 @@ function App() {
   }, [client]);
 
   return (
-    <FullCalendar
-      plugins={[ dayGridPlugin, timeGridPlugin ]}
-      timeZone={'UTC'}
-      initialView="timeGridWeek"
-      headerToolbar={{
-        left: 'prev,next today',
-        center: 'title',
-        right: 'timeGridWeek,dayGridMonth,dayGridDay'
-      }}
-      allDaySlot={false}
-      slotMinTime={"08:00:00"}
-      slotMaxTime={"23:00:00"}
-      nowIndicator={true}
-      initialEvents={events.map(e => ({ ...e, id: e.id.toString() }))}
-    />
+    <>
+      {intialLoaded && (
+        <FullCalendar
+          plugins={[ dayGridPlugin, timeGridPlugin ]}
+          timeZone={'UTC'}
+          initialView="timeGridWeek"
+          headerToolbar={{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'timeGridWeek,dayGridMonth,dayGridDay'
+          }}
+          allDaySlot={false}
+          slotMinTime={"08:00:00"}
+          slotMaxTime={"23:00:00"}
+          nowIndicator={true}
+          initialEvents={events.map(e => ({ ...e, id: e.id.toString() }))}
+        />
+      )}
+    </>
   )
 }
 
