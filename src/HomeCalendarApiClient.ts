@@ -52,7 +52,7 @@ export class HomeCalendarApiClient {
 
   /** Create a new event (or series) */
   async createEvent(input: EventInput): Promise<Event[]> {
-    const res = await fetch(`${this.baseUrl}/api/v1/events`, {
+    const res = await fetch(`${this.baseUrl}/events`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -78,7 +78,7 @@ export class HomeCalendarApiClient {
 
   /** Retrieve a single event */
   async getEvent(id: string): Promise<Event> {
-    const res = await fetch(`${this.baseUrl}/api/v1/events/${id}`, {
+    const res = await fetch(`${this.baseUrl}/events/${id}`, {
       method: "GET",
       headers: { Accept: "application/json" },
     });
@@ -96,7 +96,7 @@ export class HomeCalendarApiClient {
 
   /** Update an event (or series) */
   async updateEvent(id: string, input: EventInput): Promise<Event[]> {
-    const res = await fetch(`${this.baseUrl}/api/v1/events/${id}`, {
+    const res = await fetch(`${this.baseUrl}/events/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -125,7 +125,7 @@ export class HomeCalendarApiClient {
 
   /** Delete an event (or series) */
   async deleteEvent(id: string, applyToSeries?: boolean): Promise<void> {
-    const url = new URL(`${this.baseUrl}/api/v1/events/${id}`);
+    const url = new URL(`${this.baseUrl}/events/${id}`);
     if (applyToSeries !== undefined) {
       url.searchParams.append("apply_to_series", applyToSeries ? "1" : "0");
     }
