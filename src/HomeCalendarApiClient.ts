@@ -1,5 +1,5 @@
 export interface Event {
-  id: number;
+  id: string;
   title?: string;
   start: string; // ISO 8601 date‑time
   end: string;   // ISO 8601 date‑time
@@ -28,12 +28,12 @@ export class HomeCalendarApiClient {
 
   constructor(baseUrl?: string) {
     // Default to localhost:3000 if not provided
-    this.baseUrl = baseUrl ?? "http://localhost:3000";
+    this.baseUrl = baseUrl ?? "http://localhost:3000/api/v1";
   }
 
   /** List events in a date range */
   async listEvents(start: string, end: string): Promise<Event[]> {
-    const url = new URL(`${this.baseUrl}/api/v1/events`);
+    const url = new URL(`${this.baseUrl}/events`);
     url.searchParams.append("start", start);
     url.searchParams.append("end", end);
 
@@ -52,7 +52,7 @@ export class HomeCalendarApiClient {
 
   /** Create a new event (or series) */
   async createEvent(input: EventInput): Promise<Event[]> {
-    const res = await fetch(`${this.baseUrl}/api/v1/events`, {
+    const res = await fetch(`${this.baseUrl}/events`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -77,15 +77,15 @@ export class HomeCalendarApiClient {
   }
 
   /** Retrieve a single event */
-  async getEvent(id: number): Promise<Event> {
-    const res = await fetch(`${this.baseUrl}/api/v1/events/${String(id)}`, {
+  async getEvent(id: string): Promise<Event> {
+    const res = await fetch(`${this.baseUrl}/events/${id}`, {
       method: "GET",
       headers: { Accept: "application/json" },
     });
 
     if (!res.ok) {
       if (res.status === 404) {
-        throw new Error(`Event ${String(id)} not found`);
+        throw new Error(`Event ${id} not found`);
       }
       const text = await res.text();
       throw new Error(`Error ${String(res.status)}: ${text}`);
@@ -95,8 +95,8 @@ export class HomeCalendarApiClient {
   }
 
   /** Update an event (or series) */
-  async updateEvent(id: number, input: EventInput): Promise<Event[]> {
-    const res = await fetch(`${this.baseUrl}/api/v1/events/${String(id)}`, {
+  async updateEvent(id: string, input: EventInput): Promise<Event[]> {
+    const res = await fetch(`${this.baseUrl}/events/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -107,7 +107,7 @@ export class HomeCalendarApiClient {
 
     if (!res.ok) {
       if (res.status === 404) {
-        throw new Error(`Event ${String(id)} not found`);
+        throw new Error(`Event ${id} not found`);
       }
       let errorMessage: string;
       try {
@@ -124,8 +124,8 @@ export class HomeCalendarApiClient {
   }
 
   /** Delete an event (or series) */
-  async deleteEvent(id: number, applyToSeries?: boolean): Promise<void> {
-    const url = new URL(`${this.baseUrl}/api/v1/events/${String(id)}`);
+  async deleteEvent(id: string, applyToSeries?: boolean): Promise<void> {
+    const url = new URL(`${this.baseUrl}/events/${id}`);
     if (applyToSeries !== undefined) {
       url.searchParams.append("apply_to_series", applyToSeries ? "1" : "0");
     }
@@ -136,7 +136,7 @@ export class HomeCalendarApiClient {
 
     if (!res.ok) {
       if (res.status === 404) {
-        throw new Error(`Event ${String(id)} not found`);
+        throw new Error(`Event ${id} not found`);
       }
       const text = await res.text();
       throw new Error(`Error ${String(res.status)}: ${text}`);
