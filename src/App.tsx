@@ -8,7 +8,7 @@ function App() {
   const apiUrl = import.meta.env.VITE_HOME_CALENDAR_API_URL as string;
   const client = useMemo(() => new HomeCalendarApiClient(apiUrl), [apiUrl]);
 
-  const [intialLoaded, setInitialLoaded] = useState<boolean>(false);
+  const [initialLoaded, setInitialLoaded] = useState<boolean>(false);
   const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function App() {
 
   return (
     <>
-      {intialLoaded && (
+      {initialLoaded && (
         <FullCalendar
           plugins={[ dayGridPlugin, timeGridPlugin ]}
           timeZone={'UTC'}
