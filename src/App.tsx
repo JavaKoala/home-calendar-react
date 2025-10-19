@@ -46,7 +46,7 @@ function App() {
           slotMinTime={"08:00:00"}
           slotMaxTime={"23:00:00"}
           nowIndicator={true}
-          initialEvents={events.map(e => ({ ...e, id: e.id.toString() }))}
+          initialEvents={events}
         />
       )}
     </>

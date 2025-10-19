@@ -1,5 +1,5 @@
 export interface Event {
-  id: number;
+  id: string;
   title?: string;
   start: string; // ISO 8601 date‑time
   end: string;   // ISO 8601 date‑time
@@ -77,15 +77,15 @@ export class HomeCalendarApiClient {
   }
 
   /** Retrieve a single event */
-  async getEvent(id: number): Promise<Event> {
-    const res = await fetch(`${this.baseUrl}/api/v1/events/${String(id)}`, {
+  async getEvent(id: string): Promise<Event> {
+    const res = await fetch(`${this.baseUrl}/api/v1/events/${id}`, {
       method: "GET",
       headers: { Accept: "application/json" },
     });
 
     if (!res.ok) {
       if (res.status === 404) {
-        throw new Error(`Event ${String(id)} not found`);
+        throw new Error(`Event ${id} not found`);
       }
       const text = await res.text();
       throw new Error(`Error ${String(res.status)}: ${text}`);
@@ -95,8 +95,8 @@ export class HomeCalendarApiClient {
   }
 
   /** Update an event (or series) */
-  async updateEvent(id: number, input: EventInput): Promise<Event[]> {
-    const res = await fetch(`${this.baseUrl}/api/v1/events/${String(id)}`, {
+  async updateEvent(id: string, input: EventInput): Promise<Event[]> {
+    const res = await fetch(`${this.baseUrl}/api/v1/events/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -107,7 +107,7 @@ export class HomeCalendarApiClient {
 
     if (!res.ok) {
       if (res.status === 404) {
-        throw new Error(`Event ${String(id)} not found`);
+        throw new Error(`Event ${id} not found`);
       }
       let errorMessage: string;
       try {
@@ -124,8 +124,8 @@ export class HomeCalendarApiClient {
   }
 
   /** Delete an event (or series) */
-  async deleteEvent(id: number, applyToSeries?: boolean): Promise<void> {
-    const url = new URL(`${this.baseUrl}/api/v1/events/${String(id)}`);
+  async deleteEvent(id: string, applyToSeries?: boolean): Promise<void> {
+    const url = new URL(`${this.baseUrl}/api/v1/events/${id}`);
     if (applyToSeries !== undefined) {
       url.searchParams.append("apply_to_series", applyToSeries ? "1" : "0");
     }
@@ -136,7 +136,7 @@ export class HomeCalendarApiClient {
 
     if (!res.ok) {
       if (res.status === 404) {
-        throw new Error(`Event ${String(id)} not found`);
+        throw new Error(`Event ${id} not found`);
       }
       const text = await res.text();
       throw new Error(`Error ${String(res.status)}: ${text}`);
