@@ -35,6 +35,7 @@ function App() {
       {initialLoaded && (
         <FullCalendar
           plugins={[ dayGridPlugin, timeGridPlugin ]}
+          height="100%"
           timeZone={'UTC'}
           initialView="timeGridWeek"
           headerToolbar={{
