@@ -2,7 +2,9 @@ import { useEffect, useState, useMemo } from 'react';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
 import { HomeCalendarApiClient, type Event } from './HomeCalendarApiClient';
+import Modal from "./components/Modal";
 
 function App() {
   const apiUrl = import.meta.env.VITE_HOME_CALENDAR_API_URL as string;
@@ -10,6 +12,11 @@ function App() {
 
   const [initialLoaded, setInitialLoaded] = useState<boolean>(false);
   const [events, setEvents] = useState<Event[]>([]);
+
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => { setModalOpen(true); };
+  const closeModal = () => { setModalOpen(false); };
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -34,7 +41,7 @@ function App() {
     <>
       {initialLoaded && (
         <FullCalendar
-          plugins={[ dayGridPlugin, timeGridPlugin ]}
+          plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
           height="100%"
           timeZone={'UTC'}
           initialView="timeGridWeek"
@@ -48,8 +55,22 @@ function App() {
           slotMaxTime={"23:00:00"}
           nowIndicator={true}
           initialEvents={events}
+          dateClick={openModal}
         />
       )}
+
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <h2 className="text-xl font-semibold">Hello from the modal!</h2>
+        <p className="mt-2 text-gray-700">
+          You can put any content here - forms, images, etc.
+        </p>
+        <button
+          className="mt-4 bg-red-600 text-white px-3 py-1 rounded"
+          onClick={closeModal}
+        >
+          Close
+        </button>
+      </Modal>
     </>
   )
 }
