@@ -3,6 +3,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { HomeCalendarApiClient, type Event } from './HomeCalendarApiClient';
+import { getStartOfSundayISO, getEndOfSaturdayISO } from './utils/date-utils';
 
 function App() {
   const apiUrl = import.meta.env.VITE_HOME_CALENDAR_API_URL as string;
@@ -12,13 +13,8 @@ function App() {
   const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchEvents = async (start: string, end: string) => {
       try {
-        const start = new Date().toISOString().split('T')[0];
-        const end = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-          .toISOString()
-          .split('T')[0];
-
         const data = await client.listEvents(start, end);
         setEvents(data);
         setInitialLoaded(true);
@@ -27,14 +23,14 @@ function App() {
       }
     };
 
-    void fetchEvents();
+    void fetchEvents(getStartOfSundayISO(), getEndOfSaturdayISO());
   }, [client]);
 
   return (
     <>
       {initialLoaded && (
         <FullCalendar
-          plugins={[ dayGridPlugin, timeGridPlugin ]}
+          plugins={[dayGridPlugin, timeGridPlugin]}
           height="100%"
           timeZone={'UTC'}
           initialView="timeGridWeek"
