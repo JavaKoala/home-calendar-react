@@ -27,7 +27,7 @@ The only env variable is `VITE_HOME_CALENDAR_API_URL` — the base URL for the b
 
 This is a single-page React 19 app that renders a FullCalendar weekly view backed by a REST API.
 
-**Data flow:** `App.tsx` initializes `HomeCalendarApiClient` with the API URL from env, fetches events for the current week on mount using `date-utils.ts` helpers, and passes them to FullCalendar as the initial event set.
+**Data flow:** `App.tsx` initializes `HomeCalendarApiClient` with the API URL from env, fetches events for the current week on mount using `date-utils.ts` helpers, and passes them to FullCalendar as the initial event set. The home_calendar API is defined in `home_calendar_swagger.yaml`
 
 **API client** (`src/HomeCalendarApiClient.ts`): Typed REST client with methods for CRUD on events. Events support recurring series via `recurring_uuid` and an `applyToSeries` flag on delete.
 

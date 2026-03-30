@@ -1,0 +1,260 @@
+---
+openapi: 3.0.1
+info:
+  title: Home Calendar API
+  version: 1.0.0
+  description: |
+    API for managing calendar events, including recurring series.
+servers:
+- url: "{protocol}://{host}:{port}"
+  variables:
+    protocol:
+      default: http
+    host:
+      default: localhost
+    port:
+      default: '3000'
+
+paths:
+  /api/v1/events:
+    get:
+      summary: List events in a date range
+      operationId: listEvents
+      parameters:
+        - in: query
+          name: start
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: Start of the date range (inclusive)
+        - in: query
+          name: end
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: End of the date range (inclusive)
+      responses:
+        '200':
+          description: A list of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '400':
+          description: Missing or invalid parameters
+          content:
+            text/plain:
+              schema:
+                type: string
+    post:
+      summary: Create a new event (or series)
+      operationId: createEvent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventInput'
+      responses:
+        '201':
+          description: Event(s) created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '400':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /api/v1/events/{id}:
+    get:
+      summary: Retrieve a single event
+      operationId: getEvent
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Event ID
+      responses:
+        '200':
+          description: Event found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+    patch:
+      summary: Update an event (or series)
+      operationId: updateEvent
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Event ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventInput'
+      responses:
+        '200':
+          description: Event(s) updated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '400':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+    delete:
+      summary: Delete an event (or series)
+      operationId: deleteEvent
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Event ID
+        - in: query
+          name: apply_to_series
+          required: false
+          schema:
+            type: boolean
+          description: |
+            If true, delete the entire series; otherwise delete only this occurrence.
+      responses:
+        '204':
+          description: Event(s) deleted
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        color:
+          type: string
+          enum:
+            - ""
+            - black
+            - green
+            - red
+            - midnightblue
+            - indigo
+            - darkorange
+            - sienna
+            - teal
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        recurring_uuid:
+          type: string
+          nullable: true
+      required:
+        - id
+        - start
+        - end
+    EventInput:
+      type: object
+      properties:
+        event:
+          type: object
+          properties:
+            title:
+              type: string
+            start:
+              type: string
+              format: date-time
+            end:
+              type: string
+              format: date-time
+            color:
+              type: string
+              enum:
+                - ""
+                - black
+                - green
+                - red
+                - midnightblue
+                - indigo
+                - darkorange
+                - sienna
+                - teal
+            recurring_times:
+              type: integer
+            apply_to_series:
+              type: string
+              nullable: true
+              enum:
+                - "0"
+                - "1"
+                - null
+            recurring_schedule:
+              type: string
+              nullable: true
+              enum:
+                - null
+                - daily
+                - weekly
+                - monthly
+                - every 2 weeks
+                - every other day
+          required:
+            - start
+            - end
