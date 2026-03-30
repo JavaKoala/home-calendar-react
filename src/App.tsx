@@ -2,8 +2,10 @@ import { useEffect, useState, useMemo } from 'react';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin, { type EventClickArg } from '@fullcalendar/interaction'
 import { HomeCalendarApiClient, type Event } from './HomeCalendarApiClient';
 import { getStartOfSundayISO, getEndOfSaturdayISO } from './utils/date-utils';
+import EventModal from './EventModal';
 
 function App() {
   const apiUrl = import.meta.env.VITE_HOME_CALENDAR_API_URL as string;
@@ -11,6 +13,11 @@ function App() {
 
   const [initialLoaded, setInitialLoaded] = useState<boolean>(false);
   const [events, setEvents] = useState<Event[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState<EventClickArg | null>(null);
+
+  const handleEventClick = (clickInfo: EventClickArg) => {
+    setSelectedEvent(clickInfo);
+  };
 
   useEffect(() => {
     const fetchEvents = async (start: string, end: string) => {
@@ -28,9 +35,12 @@ function App() {
 
   return (
     <>
+      {selectedEvent && (
+        <EventModal clickInfo={selectedEvent} onClose={() => setSelectedEvent(null)} />
+      )}
       {initialLoaded && (
         <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin]}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           height="100%"
           timeZone={'UTC'}
           initialView="timeGridWeek"
@@ -44,6 +54,7 @@ function App() {
           slotMaxTime={"23:00:00"}
           nowIndicator={true}
           initialEvents={events}
+          eventClick={handleEventClick}
         />
       )}
     </>
