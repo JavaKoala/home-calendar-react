@@ -2,8 +2,9 @@ import { useEffect, useState, useMemo } from 'react';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin, { type EventClickArg } from '@fullcalendar/interaction'
-import { HomeCalendarApiClient, type Event } from './HomeCalendarApiClient';
+import interactionPlugin from '@fullcalendar/interaction'
+import type { EventClickArg } from '@fullcalendar/core'
+import { HomeCalendarApiClient, type Event, type EventInput } from './HomeCalendarApiClient';
 import { getStartOfSundayISO, getEndOfSaturdayISO } from './utils/date-utils';
 import EventModal from './EventModal';
 
@@ -17,6 +18,10 @@ function App() {
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     setSelectedEvent(clickInfo);
+  };
+
+  const handleEventSave = async (id: string, input: EventInput) => {
+    await client.updateEvent(id, input);
   };
 
   useEffect(() => {
@@ -36,7 +41,11 @@ function App() {
   return (
     <>
       {selectedEvent && (
-        <EventModal clickInfo={selectedEvent} onClose={() => setSelectedEvent(null)} />
+        <EventModal
+          clickInfo={selectedEvent}
+          onClose={() => { setSelectedEvent(null); }}
+          onSave={handleEventSave}
+        />
       )}
       {initialLoaded && (
         <FullCalendar
