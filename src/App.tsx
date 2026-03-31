@@ -13,7 +13,7 @@ function App() {
   const client = useMemo(() => new HomeCalendarApiClient(apiUrl), [apiUrl]);
   const calendarRef = useRef<FullCalendar>(null);
 
-  const [initialLoaded, setInitialLoaded] = useState<boolean>(false);
+  const [initialLoaded, setInitialLoaded] = useState(false);
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<EventClickArg | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
