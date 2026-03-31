@@ -2,39 +2,73 @@ import { useState } from 'react';
 import type { EventClickArg } from '@fullcalendar/core';
 import type { EventInput } from './HomeCalendarApiClient';
 
-interface EventModalProps {
-  clickInfo: EventClickArg;
-  onClose: () => void;
-  onSave: (id: string, input: EventInput) => Promise<void>;
-}
+type EventModalProps =
+  | {
+      mode: 'create';
+      initialStart: string;
+      onClose: () => void;
+      onCreate: (input: EventInput) => Promise<void>;
+    }
+  | {
+      mode: 'edit';
+      clickInfo: EventClickArg;
+      onClose: () => void;
+      onSave: (id: string, input: EventInput) => Promise<void>;
+    };
 
 function toDateTimeLocal(iso: string): string {
+  // Handle date-only strings (e.g. "2024-01-15") from day grid clicks
+  if (!iso.includes('T')) {
+    return `${iso}T12:00`;
+  }
   return iso.replace('Z', '').slice(0, 16);
+}
+
+function addOneHour(dateTimeLocal: string): string {
+  const d = new Date(`${dateTimeLocal}:00Z`);
+  d.setUTCHours(d.getUTCHours() + 1);
+  return toDateTimeLocal(d.toISOString());
 }
 
 function toISO(local: string): string {
   return `${local}:00Z`;
 }
 
-export default function EventModal({ clickInfo, onClose, onSave }: EventModalProps) {
-  const { event } = clickInfo;
+export default function EventModal(props: EventModalProps) {
+  const isCreate = props.mode === 'create';
 
-  const [title, setTitle] = useState(event.title);
-  const [start, setStart] = useState(toDateTimeLocal(event.startStr));
-  const [end, setEnd] = useState(toDateTimeLocal(event.endStr));
-  const [color, setColor] = useState(event.backgroundColor);
+  const initialStart = isCreate
+    ? toDateTimeLocal(props.initialStart)
+    : toDateTimeLocal(props.clickInfo.event.startStr);
+
+  const [title, setTitle] = useState(isCreate ? '' : props.clickInfo.event.title);
+  const [start, setStart] = useState(initialStart);
+  const [end, setEnd] = useState(
+    isCreate ? addOneHour(initialStart) : toDateTimeLocal(props.clickInfo.event.endStr)
+  );
+  const [color, setColor] = useState(
+    isCreate ? '#3b82f6' : props.clickInfo.event.backgroundColor
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const { onClose } = props;
 
   const handleSave = async () => {
     setSaving(true);
     setError(null);
     try {
-      await onSave(event.id, { event: { title, start: toISO(start), end: toISO(end), color } });
-      event.setProp('title', title);
-      event.setStart(toISO(start));
-      event.setEnd(toISO(end));
-      event.setProp('color', color);
+      const input: EventInput = { event: { title, start: toISO(start), end: toISO(end), color } };
+      if (isCreate) {
+        await props.onCreate(input);
+      } else {
+        const { event } = props.clickInfo;
+        await props.onSave(event.id, input);
+        event.setProp('title', title);
+        event.setStart(toISO(start));
+        event.setEnd(toISO(end));
+        event.setProp('color', color);
+      }
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save');
@@ -52,7 +86,9 @@ export default function EventModal({ clickInfo, onClose, onSave }: EventModalPro
         onClick={(e) => { e.stopPropagation(); }}
       >
         <div className="flex items-start justify-between gap-4 mb-5">
-          <h2 className="text-xl font-semibold text-gray-900">Edit Event</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            {isCreate ? 'New Event' : 'Edit Event'}
+          </h2>
           <button
             type="button"
             onClick={onClose}
@@ -72,6 +108,7 @@ export default function EventModal({ clickInfo, onClose, onSave }: EventModalPro
               onChange={(e) => { setTitle(e.target.value); }}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Event title"
+              autoFocus
             />
           </div>
 
@@ -125,7 +162,7 @@ export default function EventModal({ clickInfo, onClose, onSave }: EventModalPro
               disabled={saving}
               className="px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg"
             >
-              {saving ? 'Saving…' : 'Save'}
+              {saving ? 'Saving…' : isCreate ? 'Create' : 'Save'}
             </button>
           </div>
         </form>
