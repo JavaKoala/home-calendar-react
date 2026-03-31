@@ -14,6 +14,7 @@ type EventModalProps =
       clickInfo: EventClickArg;
       onClose: () => void;
       onSave: (id: string, input: EventInput) => Promise<void>;
+      onDelete: (id: string) => Promise<void>;
     };
 
 function toDateTimeLocal(iso: string): string {
@@ -50,9 +51,25 @@ export default function EventModal(props: EventModalProps) {
     isCreate ? '#3b82f6' : props.clickInfo.event.backgroundColor
   );
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const { onClose } = props;
+
+  const handleDelete = async () => {
+    if (props.mode !== 'edit') return;
+    setDeleting(true);
+    setError(null);
+    try {
+      const { event } = props.clickInfo;
+      await props.onDelete(event.id);
+      event.remove();
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete');
+      setDeleting(false);
+    }
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -149,21 +166,35 @@ export default function EventModal(props: EventModalProps) {
 
           {error !== null && <p className="text-sm text-red-600">{error}</p>}
 
-          <div className="flex justify-end gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={saving}
-              className="px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg"
-            >
-              {saving ? 'Saving…' : isCreate ? 'Create' : 'Save'}
-            </button>
+          <div className="flex justify-between gap-3 pt-2">
+            <div>
+              {!isCreate && (
+                <button
+                  type="button"
+                  onClick={() => { void handleDelete(); }}
+                  disabled={deleting || saving}
+                  className="px-4 py-2 text-sm text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 rounded-lg"
+                >
+                  {deleting ? 'Deleting…' : 'Delete'}
+                </button>
+              )}
+            </div>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={saving || deleting}
+                className="px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg"
+              >
+                {saving ? 'Saving…' : isCreate ? 'Create' : 'Save'}
+              </button>
+            </div>
           </div>
         </form>
       </div>

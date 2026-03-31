@@ -44,6 +44,10 @@ function App() {
     await client.updateEvent(id, input);
   };
 
+  const handleEventDelete = async (id: string) => {
+    await client.deleteEvent(id);
+  };
+
   const handleEventCreate = async (input: EventInput) => {
     const created = await client.createEvent(input);
     const api = calendarRef.current?.getApi();
@@ -66,6 +70,7 @@ function App() {
           clickInfo={selectedEvent}
           onClose={() => { setSelectedEvent(null); }}
           onSave={handleEventSave}
+          onDelete={handleEventDelete}
         />
       )}
       {selectedDate && (
