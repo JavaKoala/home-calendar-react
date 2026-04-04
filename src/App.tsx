@@ -90,8 +90,8 @@ function App() {
           initialView="timeGridWeek"
           headerToolbar={{
             left: 'prev,next today',
-            center: 'title',
-            right: 'timeGridWeek,dayGridMonth,dayGridDay'
+            center: '',
+            right: ''
           }}
           allDaySlot={false}
           slotMinTime={"08:00:00"}
