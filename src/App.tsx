@@ -1,11 +1,10 @@
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin, { type DateClickArg } from '@fullcalendar/interaction'
-import type { EventClickArg } from '@fullcalendar/core'
+import type { EventClickArg, DatesSetArg } from '@fullcalendar/core'
 import { HomeCalendarApiClient, type Event, type EventInput } from './HomeCalendarApiClient';
-import { getStartOfSundayISO, getEndOfSaturdayISO } from './utils/date-utils';
 import EventModal from './EventModal';
 
 function App() {
@@ -13,24 +12,15 @@ function App() {
   const client = useMemo(() => new HomeCalendarApiClient(apiUrl), [apiUrl]);
   const calendarRef = useRef<FullCalendar>(null);
 
-  const [initialLoaded, setInitialLoaded] = useState(false);
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<EventClickArg | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchEvents = async (start: string, end: string) => {
-      try {
-        const data = await client.listEvents(start, end);
-        setEvents(data);
-        setInitialLoaded(true);
-      } catch (err) {
-        console.error('Failed to load events', err);
-      }
-    };
-
-    void fetchEvents(getStartOfSundayISO(), getEndOfSaturdayISO());
-  }, [client]);
+  const handleDatesSet = (dateInfo: DatesSetArg) => {
+    void client.listEvents(dateInfo.startStr, dateInfo.endStr)
+      .then(setEvents)
+      .catch((err: unknown) => { console.error('Failed to load events', err); });
+  };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     setSelectedEvent(clickInfo);
@@ -81,27 +71,26 @@ function App() {
           onCreate={handleEventCreate}
         />
       )}
-      {initialLoaded && (
-        <FullCalendar
-          ref={calendarRef}
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          height="100%"
-          timeZone={'UTC'}
-          initialView="timeGridWeek"
-          headerToolbar={{
-            left: 'prev,next today',
-            center: '',
-            right: ''
-          }}
-          allDaySlot={false}
-          slotMinTime={"08:00:00"}
-          slotMaxTime={"23:00:00"}
-          nowIndicator={true}
-          initialEvents={events}
-          eventClick={handleEventClick}
-          dateClick={handleDateClick}
-        />
-      )}
+      <FullCalendar
+        ref={calendarRef}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        height="100%"
+        timeZone={'UTC'}
+        initialView="timeGridWeek"
+        headerToolbar={{
+          left: 'prev,next today',
+          center: '',
+          right: ''
+        }}
+        allDaySlot={false}
+        slotMinTime={"08:00:00"}
+        slotMaxTime={"23:00:00"}
+        nowIndicator={true}
+        events={events}
+        datesSet={handleDatesSet}
+        eventClick={handleEventClick}
+        dateClick={handleDateClick}
+      />
     </>
   )
 }
