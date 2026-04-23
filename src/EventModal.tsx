@@ -109,7 +109,7 @@ export default function EventModal(props: EventModalProps) {
           <button
             type="button"
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-2xl leading-none flex-shrink-0"
+            className="text-gray-400 hover:text-gray-600 text-2xl leading-none shrink-0"
             aria-label="Close"
           >
             &times;
