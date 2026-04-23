@@ -109,7 +109,7 @@ export default function EventModal(props: EventModalProps) {
           <button
             type="button"
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-2xl leading-none flex-shrink-0"
+            className="text-gray-400 hover:text-gray-600 text-2xl leading-none shrink-0"
             aria-label="Close"
           >
             &times;
@@ -118,41 +118,41 @@ export default function EventModal(props: EventModalProps) {
 
         <form onSubmit={(e) => { e.preventDefault(); void handleSave(); }} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+            <label className="block text-base font-medium text-gray-700 mb-1">Title</label>
             <input
               type="text"
               value={title}
               onChange={(e) => { setTitle(e.target.value); }}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Event title"
               autoFocus
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Start</label>
+            <label className="block text-base font-medium text-gray-700 mb-1">Start</label>
             <input
               type="datetime-local"
               value={start}
               onChange={(e) => { setStart(e.target.value); }}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">End</label>
+            <label className="block text-base font-medium text-gray-700 mb-1">End</label>
             <input
               type="datetime-local"
               value={end}
               onChange={(e) => { setEnd(e.target.value); }}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Color</label>
+            <label className="block text-base font-medium text-gray-700 mb-1">Color</label>
             <div className="flex items-center gap-3">
               <input
                 type="color"
@@ -160,11 +160,11 @@ export default function EventModal(props: EventModalProps) {
                 onChange={(e) => { setColor(e.target.value); }}
                 className="h-9 w-16 cursor-pointer rounded border border-gray-300 p-0.5"
               />
-              <span className="text-sm text-gray-500">{color}</span>
+              <span className="text-base text-gray-500">{color}</span>
             </div>
           </div>
 
-          {error !== null && <p className="text-sm text-red-600">{error}</p>}
+          {error !== null && <p className="text-base text-red-600">{error}</p>}
 
           <div className="flex justify-between gap-3 pt-2">
             <div>
@@ -173,7 +173,7 @@ export default function EventModal(props: EventModalProps) {
                   type="button"
                   onClick={() => { void handleDelete(); }}
                   disabled={deleting || saving}
-                  className="px-4 py-2 text-sm text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 rounded-lg"
+                  className="px-4 py-2 text-base text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 rounded-lg"
                 >
                   {deleting ? 'Deleting…' : 'Delete'}
                 </button>
@@ -183,14 +183,14 @@ export default function EventModal(props: EventModalProps) {
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg"
+                className="px-4 py-2 text-base text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={saving || deleting}
-                className="px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg"
+                className="px-4 py-2 text-base text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg"
               >
                 {saving ? 'Saving…' : isCreate ? 'Create' : 'Save'}
               </button>
