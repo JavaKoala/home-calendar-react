@@ -85,7 +85,7 @@ function App() {
         allDaySlot={false}
         slotMinTime={"08:00:00"}
         slotMaxTime={"23:00:00"}
-        nowIndicator={true}
+        nowIndicator={false}
         events={events}
         datesSet={handleDatesSet}
         eventClick={handleEventClick}
