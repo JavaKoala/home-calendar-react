@@ -35,6 +35,18 @@ function toISO(local: string): string {
   return `${local}:00Z`;
 }
 
+const colorMap: Record<string, string> = {
+  "#3b82f6": "default blue",
+  "#000000": "black",
+  "#008000": "green",
+  "#ff0000": "red",
+  "#191970": "midnight blue",
+  "#4b0082": "indigo",
+  "#ff8c00": "dark orange",
+  "#a0522d": "sienna",
+  "#008080": "teal"
+};
+
 export default function EventModal(props: EventModalProps) {
   const isCreate = props.mode === 'create';
 
@@ -156,12 +168,24 @@ export default function EventModal(props: EventModalProps) {
             <div className="flex items-center gap-3">
               <input
                 type="color"
+                list="color-list"
                 value={color}
                 onChange={(e) => { setColor(e.target.value); }}
                 className="h-9 w-16 cursor-pointer rounded border border-gray-300 p-0.5"
               />
-              <span className="text-base text-gray-500">{color}</span>
+              <span className="text-base text-gray-500">{colorMap[color.toLowerCase()] ?? color}</span>
             </div>
+            <datalist id="color-list">
+              <option value="#3b82f6"></option>
+              <option value="#000000"></option>
+              <option value="#008000"></option>
+              <option value="#ff0000"></option>
+              <option value="#191970"></option>
+              <option value="#4b0082"></option>
+              <option value="#ff8c00"></option>
+              <option value="#a0522d"></option>
+              <option value="#008080"></option>
+            </datalist>
           </div>
 
           {error !== null && <p className="text-base text-red-600">{error}</p>}
