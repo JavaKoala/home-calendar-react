@@ -50,6 +50,17 @@ export default function EventModal(props: EventModalProps) {
   const [color, setColor] = useState(
     isCreate ? '#3b82f6' : props.clickInfo.event.backgroundColor
   );
+  const colorMap: Record<string, string> = {
+    "#3b82f6": "default blue",
+    "#000000": "black",
+    "#008000": "green",
+    "#ff0000": "red",
+    "#191970": "midnightblue",
+    "#4b0082": "indigo",
+    "#ff8c00": "darkorange",
+    "#a0522d": "sienna",
+    "#008080": "teal"
+  };
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -156,11 +167,22 @@ export default function EventModal(props: EventModalProps) {
             <div className="flex items-center gap-3">
               <input
                 type="color"
+                list="color-list"
                 value={color}
                 onChange={(e) => { setColor(e.target.value); }}
                 className="h-9 w-16 cursor-pointer rounded border border-gray-300 p-0.5"
               />
-              <span className="text-base text-gray-500">{color}</span>
+              <span className="text-base text-gray-500">{colorMap[color] ?? color}</span>
+              <datalist id="color-list">
+                <option value="#000000"></option>
+                <option value="#008000"></option>
+                <option value="#ff0000"></option>
+                <option value="#191970"></option>
+                <option value="#4b0082"></option>
+                <option value="#ff8c00"></option>
+                <option value="#a0522d"></option>
+                <option value="#008080"></option>
+              </datalist>
             </div>
           </div>
 
