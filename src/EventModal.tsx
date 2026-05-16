@@ -174,17 +174,17 @@ export default function EventModal(props: EventModalProps) {
                 className="h-9 w-16 cursor-pointer rounded border border-gray-300 p-0.5"
               />
               <span className="text-base text-gray-500">{colorMap[color] ?? color}</span>
-              <datalist id="color-list">
-                <option value="#000000"></option>
-                <option value="#008000"></option>
-                <option value="#ff0000"></option>
-                <option value="#191970"></option>
-                <option value="#4b0082"></option>
-                <option value="#ff8c00"></option>
-                <option value="#a0522d"></option>
-                <option value="#008080"></option>
-              </datalist>
             </div>
+            <datalist id="color-list">
+              <option value="#000000"></option>
+              <option value="#008000"></option>
+              <option value="#ff0000"></option>
+              <option value="#191970"></option>
+              <option value="#4b0082"></option>
+              <option value="#ff8c00"></option>
+              <option value="#a0522d"></option>
+              <option value="#008080"></option>
+            </datalist>
           </div>
 
           {error !== null && <p className="text-base text-red-600">{error}</p>}
