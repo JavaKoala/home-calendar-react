@@ -85,7 +85,8 @@ function App() {
         allDaySlot={false}
         slotMinTime={"08:00:00"}
         slotMaxTime={"23:00:00"}
-        nowIndicator={false}
+        nowIndicator={true}
+        now={new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)}
         events={events}
         datesSet={handleDatesSet}
         eventClick={handleEventClick}
