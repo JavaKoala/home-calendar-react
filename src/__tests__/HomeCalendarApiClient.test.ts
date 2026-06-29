@@ -3,13 +3,16 @@ import { HomeCalendarApiClient } from '../HomeCalendarApiClient';
 describe('HomeCalendarApiClient', () => {
   let client: HomeCalendarApiClient;
   const mockBaseUrl = 'http://localhost:3000/api/v1';
-  
+  let originalFetch: typeof global.fetch;
+
   beforeEach(() => {
+    originalFetch = global.fetch;
     client = new HomeCalendarApiClient(mockBaseUrl);
-    global.fetch = jest.fn();
+    global.fetch = jest.fn() as unknown as typeof fetch;
   });
 
   afterEach(() => {
+    global.fetch = originalFetch;
     jest.clearAllMocks();
   });
 
