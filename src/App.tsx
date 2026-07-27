@@ -52,6 +52,10 @@ function App() {
     });
   };
 
+  function handleExportAction(): void {
+    alert("TESTING")
+  }
+
   return (
     <>
       {selectedEvent && (
@@ -77,10 +81,16 @@ function App() {
         height="100%"
         timeZone={'UTC'}
         initialView="timeGridWeek"
+        customButtons={{
+          export: {
+            text: "📥",
+            click: handleExportAction,
+          },
+        }}
         headerToolbar={{
           left: 'prev,next today',
           center: '',
-          right: ''
+          right: 'export'
         }}
         allDaySlot={false}
         slotMinTime={"08:00:00"}
