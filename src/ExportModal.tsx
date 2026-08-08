@@ -77,7 +77,7 @@ export default function ExportModal(props: ExportModalProps) {
                 Cancel
               </button>
               <a href={client.exportICalLink(start, end)} target="_blank" rel="noopener noreferrer"
-                type="submit"
+                onClick={onClose}
                 className="px-4 py-2 text-base text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg"
               >
                 Download
