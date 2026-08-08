@@ -16,9 +16,19 @@ export default function ExportModal(props: ExportModalProps) {
         onClick={(e) => { e.stopPropagation(); }}
       >
         <div className="flex items-start justify-between gap-4 mb-5">
-          <h2 className="text-xl font-semibold text-gray-900">
-            Export Calendar Events
-          </h2>
+          <div className="flex items-start justify-between gap-4 mb-5">
+            <h2 className="text-xl font-semibold text-gray-900">
+              Export Calendar Events
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 text-2xl leading-none shrink-0"
+            aria-label="Close"
+          >
+            &times;
+          </button>
         </div>
       </div>
     </div>
