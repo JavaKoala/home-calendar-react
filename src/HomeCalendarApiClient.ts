@@ -142,4 +142,9 @@ export class HomeCalendarApiClient {
       throw new Error(`Error ${String(res.status)}: ${text}`);
     }
   }
+
+  exportICalLink(start: string, end: string): string {
+    const url = new URL(`${this.baseUrl}/icalendar?start=${start}&end=${end}`);
+    return url.toString();
+  }
 }

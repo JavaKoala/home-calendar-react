@@ -84,6 +84,7 @@ function App() {
         <ExportModal
           exportModalOpen={exportModalOpen}
           onClose={closeExportModal}
+          client={client}
         />
       )}
       <FullCalendar

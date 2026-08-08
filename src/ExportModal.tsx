@@ -1,19 +1,21 @@
 import { useState } from 'react';
+import type { HomeCalendarApiClient } from './HomeCalendarApiClient';
 
 interface ExportModalProps {
   exportModalOpen: boolean;
   onClose: () => void;
+  client: HomeCalendarApiClient;
 };
 
 export default function ExportModal(props: ExportModalProps) {
   const { onClose } = props;
+  const { client } = props;
 
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
 
   const handleSubmit = () => {
-    console.log(start);
-    console.log(end);
+    console.log(client.exportICalLink(start, end));
     return null;
   };
 
