@@ -14,6 +14,14 @@ export default function ExportModal(props: ExportModalProps) {
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
 
+  const readyToDownload = () => {
+    if (start.trim().length > 0 && end.trim().length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -73,7 +81,11 @@ export default function ExportModal(props: ExportModalProps) {
               </button>
               <a href={client.exportICalLink(start, end)} target="_blank" rel="noopener noreferrer"
                 onClick={onClose}
-                className="px-4 py-2 text-base text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
+                className={
+                  readyToDownload() ?
+                  'px-4 py-2 text-base text-white bg-blue-600 hover:bg-blue-700 rounded-lg' :
+                  'pointer-events-none opacity-50 cursor-not-allowed px-4 py-2 text-base text-white bg-blue-600 hover:bg-blue-700 rounded-lg'
+                }
               >
                 Download
               </a>
