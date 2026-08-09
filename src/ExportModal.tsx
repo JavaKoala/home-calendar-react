@@ -14,11 +14,6 @@ export default function ExportModal(props: ExportModalProps) {
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
 
-  const handleSubmit = () => {
-    console.log(client.exportICalLink(start, end));
-    return null;
-  };
-
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -44,7 +39,7 @@ export default function ExportModal(props: ExportModalProps) {
           </button>
         </div>
 
-        <form onSubmit={(e) => { e.preventDefault(); void handleSubmit(); }} className="space-y-4">
+        <div className="space-y-4">
           <div>
             <label className="block text-base font-medium text-gray-700 mb-1">Start</label>
             <input
@@ -78,13 +73,13 @@ export default function ExportModal(props: ExportModalProps) {
               </button>
               <a href={client.exportICalLink(start, end)} target="_blank" rel="noopener noreferrer"
                 onClick={onClose}
-                className="px-4 py-2 text-base text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg"
+                className="px-4 py-2 text-base text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
               >
                 Download
               </a>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   )
