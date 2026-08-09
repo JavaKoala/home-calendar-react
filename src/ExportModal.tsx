@@ -14,13 +14,10 @@ export default function ExportModal(props: ExportModalProps) {
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
 
-  const readyToDownload = () => {
-    if (start.trim().length > 0 && end.trim().length > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+const readyToDownload = () =>
+    start.trim().length > 0 &&
+    end.trim().length > 0 &&
+    start < end;
 
   return (
     <div
