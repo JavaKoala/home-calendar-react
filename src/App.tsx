@@ -6,6 +6,7 @@ import interactionPlugin, { type DateClickArg } from '@fullcalendar/interaction'
 import type { EventClickArg, DatesSetArg } from '@fullcalendar/core'
 import { HomeCalendarApiClient, type Event, type EventInput } from './HomeCalendarApiClient';
 import EventModal from './EventModal';
+import ExportModal from './ExportModal';
 
 function App() {
   const apiUrl = import.meta.env.VITE_HOME_CALENDAR_API_URL as string;
@@ -15,6 +16,7 @@ function App() {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<EventClickArg | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [exportModalOpen, setExportModalOpen] = useState(false);
 
   const handleDatesSet = (dateInfo: DatesSetArg) => {
     void client.listEvents(dateInfo.startStr, dateInfo.endStr)
@@ -52,6 +54,13 @@ function App() {
     });
   };
 
+  const openExportModal = () => { setExportModalOpen(true); };
+  const closeExportModal = () => { setExportModalOpen(false); };
+
+  function handleExportAction(): void {
+    openExportModal();
+  }
+
   return (
     <>
       {selectedEvent && (
@@ -71,16 +80,29 @@ function App() {
           onCreate={handleEventCreate}
         />
       )}
+      {exportModalOpen && (
+        <ExportModal
+          exportModalOpen={exportModalOpen}
+          onClose={closeExportModal}
+          client={client}
+        />
+      )}
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         height="100%"
         timeZone={'UTC'}
         initialView="timeGridWeek"
+        customButtons={{
+          export: {
+            text: "📥",
+            click: handleExportAction,
+          },
+        }}
         headerToolbar={{
           left: 'prev,next today',
           center: '',
-          right: ''
+          right: 'export'
         }}
         allDaySlot={false}
         slotMinTime={"08:00:00"}

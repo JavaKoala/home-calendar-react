@@ -170,6 +170,44 @@ paths:
                 type: object
                 properties: {}
 
+  /api/v1/icalendar:
+    get:
+      summary: Returns ics file with events in a date range
+      operationId: icsEvents
+      parameters:
+        - in: query
+          name: start
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: Start of the date range
+        - in: query
+          name: end
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: End of the date range
+      responses:
+        '200':
+          description: Returns the iCalendar file for the events
+          content:
+            text/calendar:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+                example: attachment; filename="home_calendar.ics"
+        '400':
+          description: Missing parameters
+          content:
+            text/plain:
+              schema:
+                type: string
 components:
   schemas:
     Event:
