@@ -144,9 +144,10 @@ export class HomeCalendarApiClient {
   }
 
   exportICalLink(start: string, end: string): string {
-const url = new URL(`${this.baseUrl}/icalendar`);
+    const url = new URL(`${this.baseUrl}/icalendar`);
     url.searchParams.append("start", start);
     url.searchParams.append("end", end);
+
     return url.toString();
   }
 }
