@@ -54,6 +54,18 @@ function App() {
     });
   };
 
+  const reloadEvents = () => {
+    const api = calendarRef.current?.getApi();
+    if (api) {
+      const currentStart = api.view.currentStart.toISOString().split('T')[0];
+      const currentEnd = api.view.currentEnd.toISOString().split('T')[0];
+      
+      void client.listEvents(currentStart, currentEnd)
+        .then(setEvents)
+        .catch((err: unknown) => { console.error('Failed to load events', err); });
+    }
+  }
+
   const openExportModal = () => { setExportModalOpen(true); };
   const closeExportModal = () => { setExportModalOpen(false); };
 
@@ -85,6 +97,7 @@ function App() {
           exportModalOpen={exportModalOpen}
           onClose={closeExportModal}
           client={client}
+          reloadEvents={reloadEvents}
         />
       )}
       <FullCalendar

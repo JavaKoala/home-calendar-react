@@ -5,11 +5,13 @@ interface ExportModalProps {
   exportModalOpen: boolean;
   onClose: () => void;
   client: HomeCalendarApiClient;
+  reloadEvents: () => void;
 };
 
 export default function ExportModal(props: ExportModalProps) {
   const { onClose } = props;
   const { client } = props;
+  const { reloadEvents } = props;
 
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
@@ -28,6 +30,7 @@ export default function ExportModal(props: ExportModalProps) {
 
     try {
       await client.importICalEvents(importFile);
+      reloadEvents();
       onClose();
     } catch (error) {
       setImportError(
