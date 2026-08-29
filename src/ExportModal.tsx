@@ -13,11 +13,28 @@ export default function ExportModal(props: ExportModalProps) {
 
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
+  const [importFile, setImportFile] = useState<File | null>(null);
+  const [importError, setImportError] = useState("");
 
   const readyToDownload = () =>
     start.trim().length > 0 &&
     end.trim().length > 0 &&
     start < end;
+
+  const handleImport = async () => {
+    if (!importFile) {
+      return;
+    }
+
+    try {
+      await client.importICalEvents(importFile);
+      onClose();
+    } catch (error) {
+      setImportError(
+        error instanceof Error ? error.message : "Unable to import calendar file.",
+      );
+    }
+  };
 
   return (
     <div
