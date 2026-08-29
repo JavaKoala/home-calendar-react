@@ -36,6 +36,7 @@ function toISO(local: string): string {
 }
 
 const colorMap: Record<string, string> = {
+  "null": "default",
   "#3b82f6": "default blue",
   "#000000": "black",
   "#008000": "green",
