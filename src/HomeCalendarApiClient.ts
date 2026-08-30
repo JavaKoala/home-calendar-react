@@ -150,4 +150,20 @@ export class HomeCalendarApiClient {
 
     return url.toString();
   }
+
+  /** Import events from an ics file */
+  async importICalEvents(file: File | Blob): Promise<void> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await fetch(`${this.baseUrl}/icalendar`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`Error ${String(res.status)}: ${text}`);
+    }
+  }
 }

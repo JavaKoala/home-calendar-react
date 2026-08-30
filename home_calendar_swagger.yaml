@@ -208,6 +208,44 @@ paths:
             text/plain:
               schema:
                 type: string
+    post:
+      summary: Import events from an ics file
+      operationId: importICalEvents
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The .ics calendar file to upload
+            encoding:
+              file:
+                contentType: text/calendar
+      responses:
+        '201':
+          description: Calendar imported successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Invalid calendar file
+          content:
+            text/plain:
+              schema:
+                type: string
+        '415':
+          description: Unsupported media type
+          content:
+            text/plain:
+              schema:
+                type: string
 components:
   schemas:
     Event:
