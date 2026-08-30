@@ -5,7 +5,7 @@ interface ExportModalProps {
   exportModalOpen: boolean;
   onClose: () => void;
   client: HomeCalendarApiClient;
-  reloadEvents: () => void;
+  reloadEvents: () => Promise<void>;
 };
 
 export default function ExportModal(props: ExportModalProps) {
@@ -30,7 +30,7 @@ export default function ExportModal(props: ExportModalProps) {
 
     try {
       await client.importICalEvents(importFile);
-      reloadEvents();
+      await reloadEvents();
       onClose();
     } catch (error) {
       setImportError(
