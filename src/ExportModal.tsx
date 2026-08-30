@@ -114,7 +114,7 @@ export default function ExportModal(props: ExportModalProps) {
           <h2 className="text-xl font-semibold text-gray-900 mb-5">Import Calendar Events</h2>
           
           {importError && (
-            <div className="mb-3 p-3 bg-red-50 text-red-700 rounded-lg text-sm">
+            <div role="alert" className="mb-3 p-3 bg-red-50 text-red-700 rounded-lg text-sm">
               {importError}
             </div>
           )}
