@@ -57,8 +57,8 @@ function App() {
   const reloadEvents = async () => {
     const api = calendarRef.current?.getApi();
     if (api) {
-      const currentStart = api.view.currentStart.toISOString().split('T')[0];
-      const currentEnd = api.view.currentEnd.toISOString().split('T')[0];
+      const currentStart = api.view.currentStart.toISOString();
+      const currentEnd = api.view.currentEnd.toISOString();
       
       await client.listEvents(currentStart, currentEnd)
         .then(setEvents);
