@@ -121,8 +121,9 @@ export default function ExportModal(props: ExportModalProps) {
           
           <form onSubmit={(e) => { e.preventDefault(); void handleImport(); }} className="space-y-4">
             <div>
-              <label className="block text-base font-medium text-gray-700 mb-1">Calendar File</label>
+              <label htmlFor="calendar-file" className="block text-base font-medium text-gray-700 mb-1">Calendar File</label>
               <input
+                id="calendar-file"
                 type="file"
                 accept=".ics,text/calendar"
                 onChange={(e) => {
